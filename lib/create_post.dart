@@ -1,13 +1,16 @@
 import 'dart:io';
-
+import 'package:block_cubit/databasehelper.dart';
+import 'package:block_cubit/model/postmodel.dart';
 import 'package:block_cubit/postdetail.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreatePost extends StatefulWidget {
+  final PostModel? postModel;
+  CreatePost({this.postModel});
+
   @override
   State<CreatePost> createState() => _CreatePostState();
 }
@@ -39,17 +42,11 @@ class _CreatePostState extends State<CreatePost> {
       UploadTask uploadTask = imageRef.putFile(image!);
       await Future.value(uploadTask);
       var imageUrl = await imageRef.getDownloadURL();
-      var url = imageUrl.toString();
-      FirebaseFirestore.instance.collection('post').add({
-        'imageUrl': imageUrl,
+      widget.postModel!.imageUrl = imageUrl;
+
+      postCollection.add({widget.postModel!.toMap()}).then((value) {
+        print('Data Uploaded');
       });
-      //     .then((value) {
-      //   Navigator.pushReplacement(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => RoleScreen()),
-      //   );
-      // });
-      return url;
     } catch (e) {
       print(e);
     }

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
+import 'package:block_cubit/databasehelper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class Postdetail extends StatefulWidget {
 
 class _CreatePostState extends State<Postdetail> {
 final Stream<QuerySnapshot> usersStream =
-FirebaseFirestore.instance.collection('Post').snapshots();
+postCollection.snapshots();
 
   @override
   Widget build(BuildContext context) {
